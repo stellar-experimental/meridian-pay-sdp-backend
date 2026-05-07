@@ -1,8 +1,6 @@
 module github.com/stellar/stellar-disbursement-platform-backend
 
-go 1.23.0
-
-toolchain go1.23.7
+go 1.25.0
 
 require (
 	github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2
@@ -39,10 +37,10 @@ require (
 	github.com/stellar/go v0.0.0-20250818235326-815d6a25c539
 	github.com/stellar/stellar-rpc v0.9.6-0.20250303213611-1e6c41bcc48a
 	github.com/stretchr/testify v1.10.0
-	github.com/twilio/twilio-go v1.26.4
-	golang.org/x/crypto v0.39.0
+	github.com/twilio/twilio-go v1.30.9
+	golang.org/x/crypto v0.50.0
 	golang.org/x/exp v0.0.0-20250305212735-054e65f0b394
-	golang.org/x/net v0.41.0
+	golang.org/x/net v0.52.0
 )
 
 require (
@@ -93,9 +91,9 @@ require (
 	github.com/xeipuuv/gojsonpointer v0.0.0-20190905194746-02993c407bfb // indirect
 	github.com/zeebo/xxh3 v1.0.2 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	golang.org/x/sync v0.15.0 // indirect
-	golang.org/x/sys v0.33.0 // indirect
-	golang.org/x/text v0.26.0 // indirect
+	golang.org/x/sync v0.20.0 // indirect
+	golang.org/x/sys v0.43.0 // indirect
+	golang.org/x/text v0.36.0 // indirect
 	google.golang.org/protobuf v1.36.5 // indirect
 	gopkg.in/tylerb/graceful.v1 v1.2.15 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
