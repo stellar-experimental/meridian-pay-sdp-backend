@@ -23,7 +23,7 @@ jobs:
       SEP10_SIGNING_PRIVATE_KEY: ${{ vars.SEP10_SIGNING_PRIVATE_KEY }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Run Docker Compose for SDP and Anchor Platform
         working-directory: dev
@@ -42,7 +42,7 @@ jobs:
           echo 'Anchor-platform is up and running.'
 
       - name: Install NodeJs
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 14
 
