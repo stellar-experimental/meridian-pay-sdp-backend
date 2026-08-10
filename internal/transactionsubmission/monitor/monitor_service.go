@@ -95,9 +95,17 @@ func (ms *TSSMonitorService) buildBaseLogEntry(ctx context.Context, tx store.Tra
 	return log.Ctx(ctx).WithFields(logFields)
 }
 
-// buildMetricLabels creates the labels map for metrics
+// buildMetricLabels creates the labels map for metrics. Only low, bounded-cardinality
+// labels are emitted here: high-cardinality fields (event_id, tx_id, event_time,
+// channel_account) are intentionally excluded to prevent unbounded Prometheus series
+// growth, and remain available in the structured logs via buildCommonFields.
 func (ms *TSSMonitorService) buildMetricLabels(tx store.Transaction, txMetadata TxMetadata) map[string]string {
-	return ms.buildCommonFields(tx, txMetadata)
+	return map[string]string{
+		"app_version":     ms.Version,
+		"git_commit_hash": ms.GitCommitHash,
+		"event_type":      txMetadata.TransactionEventType,
+		"tenant_id":       tx.TenantID,
+	}
 }
 
 // logTransactionEvent handles the actual logging based on the event type

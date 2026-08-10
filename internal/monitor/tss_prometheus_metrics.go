@@ -53,9 +53,12 @@ var SummaryTSSVecMetrics = map[MetricTag]*prometheus.SummaryVec{
 
 var CounterTSSMetrics = map[MetricTag]prometheus.Counter{}
 
+// Only low, bounded-cardinality labels are used for these metrics. High-cardinality
+// fields (event_id, tx_id, event_time, channel_account) would create an unbounded number
+// of Prometheus series — they remain available in the structured logs instead.
 var (
-	paymentLabelNames        = []string{"event_id", "event_type", "tx_id", "event_time", "app_version", "git_commit_hash", "tenant_id", "channel_account"}
-	walletCreationLabelNames = []string{"event_id", "event_type", "tx_id", "event_time", "app_version", "git_commit_hash", "tenant_id", "channel_account"}
+	paymentLabelNames        = []string{"event_type", "app_version", "git_commit_hash", "tenant_id"}
+	walletCreationLabelNames = []string{"event_type", "app_version", "git_commit_hash", "tenant_id"}
 )
 
 var CounterTSSVecMetrics = map[MetricTag]*prometheus.CounterVec{
