@@ -18,8 +18,8 @@ RUN apk add --no-cache jq
 COPY --from=build /src/stellar-disbursement-platform /app/github.com/stellar/stellar-disbursement-platform
 # Build a debug version of the binary
 RUN go build -gcflags="all=-N -l" -o stellar-disbursement-platform .
-# Install Delve
-RUN go install github.com/go-delve/delve/cmd/dlv@latest
+# Install Delve (pinned: v1.27+ requires Go >= 1.25, but this image is on Go 1.24.4)
+RUN go install github.com/go-delve/delve/cmd/dlv@v1.26.3
 # Ensure the binary has executable permissions
 RUN chmod +x /app/github.com/stellar/stellar-disbursement-platform/stellar-disbursement-platform
 EXPOSE 8001 2345
