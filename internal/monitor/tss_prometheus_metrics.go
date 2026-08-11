@@ -56,9 +56,13 @@ var CounterTSSMetrics = map[MetricTag]prometheus.Counter{}
 // Only low, bounded-cardinality labels are used for these metrics. High-cardinality
 // fields (event_id, tx_id, event_time, channel_account) would create an unbounded number
 // of Prometheus series — they remain available in the structured logs instead.
+// Payment and wallet-creation counters share the same label set; defined once here so
+// they can't silently diverge.
+var tssCounterLabelNames = []string{"event_type", "app_version", "git_commit_hash", "tenant_id"}
+
 var (
-	paymentLabelNames        = []string{"event_type", "app_version", "git_commit_hash", "tenant_id"}
-	walletCreationLabelNames = []string{"event_type", "app_version", "git_commit_hash", "tenant_id"}
+	paymentLabelNames        = tssCounterLabelNames
+	walletCreationLabelNames = tssCounterLabelNames
 )
 
 var CounterTSSVecMetrics = map[MetricTag]*prometheus.CounterVec{
