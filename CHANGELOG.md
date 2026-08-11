@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Fixed
 
+- Bound TSS Prometheus counter label cardinality (drop `event_id`, `tx_id`, `event_time`, `channel_account`) to prevent unbounded metric growth and OOM in the `tss` service. [#6](https://github.com/stellar-experimental/meridian-pay-sdp-backend/pull/6)
 - Reject payment amounts that exceed Stellar's 7-decimal-place precision in `utils.ValidateAmount`. [#1116](https://github.com/stellar/stellar-disbursement-platform-backend/pull/1116)
 - Fix unbounded CSV upload size and pagination `page_limit` allowing resource exhaustion. [#1064](https://github.com/stellar/stellar-disbursement-platform-backend/pull/1064)
 
