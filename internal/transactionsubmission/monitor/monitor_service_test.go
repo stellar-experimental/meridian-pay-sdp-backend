@@ -259,7 +259,19 @@ func Test_TSSMonitorService_LogAndMonitorTransaction(t *testing.T) {
 
 			ctx := context.Background()
 
-			mMonitorClient.On("MonitorCounters", tc.metricTag, mock.Anything).Return(nil).Once()
+			expectedMetricLabels := map[string]string{
+				"event_type":      tc.txMetadata.TransactionEventType,
+				"tenant_id":       tc.txModel.TenantID,
+				"app_version":     tssMonitorSvc.Version,
+				"git_commit_hash": tssMonitorSvc.GitCommitHash,
+			}
+			mMonitorClient.On("MonitorCounters", tc.metricTag, mock.Anything).
+				Run(func(args mock.Arguments) {
+					labels, _ := args.Get(1).(map[string]string)
+					assert.Equal(t, expectedMetricLabels, labels,
+						"metric labels must stay low-cardinality — no event_id/tx_id/event_time/channel_account")
+				}).
+				Return(nil).Once()
 			tssMonitorSvc.LogAndMonitorTransaction(ctx, tc.txModel, tc.metricTag, tc.txMetadata)
 
 			logEntries := getLogEntries()
