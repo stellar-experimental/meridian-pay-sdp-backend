@@ -11,6 +11,7 @@ import (
 	"github.com/stellar/go/support/log"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/require"
 
 	sdpMonitor "github.com/stellar/stellar-disbursement-platform-backend/internal/monitor"
 	sdpMonitorMocks "github.com/stellar/stellar-disbursement-platform-backend/internal/monitor/mocks"
@@ -259,7 +260,20 @@ func Test_TSSMonitorService_LogAndMonitorTransaction(t *testing.T) {
 
 			ctx := context.Background()
 
-			mMonitorClient.On("MonitorCounters", tc.metricTag, mock.Anything).Return(nil).Once()
+			expectedMetricLabels := map[string]string{
+				"event_type":      tc.txMetadata.TransactionEventType,
+				"tenant_id":       tc.txModel.TenantID,
+				"app_version":     tssMonitorSvc.Version,
+				"git_commit_hash": tssMonitorSvc.GitCommitHash,
+			}
+			mMonitorClient.On("MonitorCounters", tc.metricTag, mock.Anything).
+				Run(func(args mock.Arguments) {
+					labels, ok := args.Get(1).(map[string]string)
+					require.True(t, ok, "expected map[string]string arg")
+					assert.Equal(t, expectedMetricLabels, labels,
+						"metric labels must stay low-cardinality — no event_id/tx_id/event_time/channel_account")
+				}).
+				Return(nil).Once()
 			tssMonitorSvc.LogAndMonitorTransaction(ctx, tc.txModel, tc.metricTag, tc.txMetadata)
 
 			logEntries := getLogEntries()
