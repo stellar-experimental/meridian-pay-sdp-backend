@@ -11,6 +11,7 @@ import (
 	"github.com/stellar/go/support/log"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/require"
 
 	sdpMonitor "github.com/stellar/stellar-disbursement-platform-backend/internal/monitor"
 	sdpMonitorMocks "github.com/stellar/stellar-disbursement-platform-backend/internal/monitor/mocks"
@@ -267,7 +268,8 @@ func Test_TSSMonitorService_LogAndMonitorTransaction(t *testing.T) {
 			}
 			mMonitorClient.On("MonitorCounters", tc.metricTag, mock.Anything).
 				Run(func(args mock.Arguments) {
-					labels, _ := args.Get(1).(map[string]string)
+					labels, ok := args.Get(1).(map[string]string)
+					require.True(t, ok, "expected map[string]string arg")
 					assert.Equal(t, expectedMetricLabels, labels,
 						"metric labels must stay low-cardinality — no event_id/tx_id/event_time/channel_account")
 				}).
